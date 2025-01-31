@@ -14,12 +14,7 @@ import java.time.LocalDateTime;
 public class User {
 
     private Long userId; // 유저 식별자
-    private String name; // 유저 이름
+    private String name; // 유저 이름 (동명이인을 고려해서 중복 가능)
     private String email; // 유저 이메일
-    private String userPassword; // 유저 패스워드
-    private LocalDateTime signUpDate; // 유저 가입 날짜+시간
-    private int  scheduleCount; // 총 작성한 일정 수
-    private String userStatus; // 유저 제재 상태
-    private Byte userLevel; // 유저 권한 레벨
-
+    private String userAccount; // 유저 식별용 계정명
 }
