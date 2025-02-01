@@ -1,4 +1,5 @@
 package com.example.scheduler.dto;
+// DTO: 데이터 전송을 위한 객체 (요청 데이터)
 
 
 import lombok.Getter;
@@ -6,7 +7,6 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-// DTO: 데이터 전송을 위한 객체 (요청 데이터)
 @Getter
 @Setter
 public class ScheduleRequestDto {

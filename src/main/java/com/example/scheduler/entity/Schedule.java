@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 public class Schedule {
 
     private Long scheduleId; // 일정 식별자
-    private User user; // 일정 작성한 유저
+    private User userAccount; // 일정 작성한 유저
     private String title; // 일정 제목
     private String description; // 일정 내용
     private LocalDateTime dateTime; // 일정 해당 날짜+시간
