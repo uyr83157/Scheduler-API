@@ -1,4 +1,4 @@
 package com.example.scheduler.controller;
 
-public class SchedulerController {
+public class UserController {
 }
