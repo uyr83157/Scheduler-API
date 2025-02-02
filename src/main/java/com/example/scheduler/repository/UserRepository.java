@@ -38,19 +38,6 @@ public class UserRepository {
                 user.getUserPassword());
     }
 
-    // userId로 특정 유저 정보 조회
-    public User findUserById(Long userId) {
-        String sql = "select * from users where user_id = ?";
-
-        // queryForObject: SQL 결과가 한 행일 때만 정상반환 시키는 jdbcTemplate 메서드
-        // 결과가 없으면 EmptyResultDataAccessException 예외
-        // 결과가 여러 행이면 IncorrectResultSizeDataAccessException 예외
-        return jdbcTemplate.queryForObject(sql,
-                // new BeanPropertyRowMapper<>(User.class): 여러 타입의 데이터를 하나의 객체로 매핑해줌(로우 매핑)
-                new BeanPropertyRowMapper<>(User.class),
-                userId);
-    }
-
     // userAccount 로 특정 유저 조회
     public User findUserByAccount(String userAccount) {
         String sql = "select * from users where user_account = ?";
