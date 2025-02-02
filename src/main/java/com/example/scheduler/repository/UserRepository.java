@@ -1,6 +1,7 @@
 package com.example.scheduler.repository;
 
 import com.example.scheduler.entity.User;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -27,6 +28,9 @@ public class UserRepository {
         String sql = "insert into users (name, email, user_account, user_password, user_created_at, user_updated_at) " +
                 "values (?, ?, ?, ?, NOW(), NOW())";
 
+        // SQL 쿼리 실행 후 영향받은 행의 수를 int 타입으로 반환
+        // 성공하면 추가하는 행의 개수가 1개 이므로 1반환, 실패하면 0반환
+        // 끝에 `> 0;` 넣어서 boolean 타입으로 반환 시킬 수 도 있음
         return jdbcTemplate.update(sql,
                 user.getName(),
                 user.getEmail(),
@@ -34,35 +38,60 @@ public class UserRepository {
                 user.getUserPassword());
     }
 
-    // 특정 유저 정보 조회
+    // userId로 특정 유저 정보 조회
     public User findUserById(Long userId) {
-        String sql = "select * from users where id = ?";
+        String sql = "select * from users where user_id = ?";
 
         // queryForObject: SQL 결과가 한 행일 때만 정상반환 시키는 jdbcTemplate 메서드
         // 결과가 없으면 EmptyResultDataAccessException 예외
         // 결과가 여러 행이면 IncorrectResultSizeDataAccessException 예외
         return jdbcTemplate.queryForObject(sql,
+                // new BeanPropertyRowMapper<>(User.class): 여러 타입의 데이터를 하나의 객체로 매핑해줌(로우 매핑)
                 new BeanPropertyRowMapper<>(User.class),
                 userId);
-        // new BeanPropertyRowMapper<>(User.class): 여러 타입의 데이터를 하나의 객체로 매핑해줌(로우 매핑)
     }
+
+    // userAccount 로 특정 유저 조회
+    public User findUserByAccount(String userAccount) {
+        String sql = "select * from users where user_account = ?";
+        try {
+            return jdbcTemplate.queryForObject(sql,
+                    new BeanPropertyRowMapper<>(User.class),
+                    userAccount);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
+
+    // email 로 특정 유저 조회
+    public User findUserByEmail(String email) {
+        String sql = "select * from users where email = ?";
+        try {
+            return jdbcTemplate.queryForObject(sql,
+                    new BeanPropertyRowMapper<>(User.class),
+                    email);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
+
 
     // 특정 유저 정보 수정
     public int updateUser(User user) {
-        String sql = "UPDATE users SET name = ?, email = ?, user_password = ?, user_updated_at = NOW() WHERE user_id = ?";
+        String sql = "UPDATE users SET name = ?, email = ?, user_password = ?, user_updated_at = NOW() WHERE user_account = ?";
 
         return jdbcTemplate.update(sql,
                 user.getName(),
                 user.getEmail(),
-                user.getUserPassword());
+                user.getUserPassword(),
+                user.getUserAccount());
     }
 
     // 특정 유저 정보 삭제
     public int deleteUserById(Long userId) {
-        String sql = "delete from users where id = ?";
+        String sql = "delete from users where user_id = ?";
         return jdbcTemplate.update(sql, userId);
     }
-
 
 
 }
